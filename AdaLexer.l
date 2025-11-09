@@ -15,11 +15,22 @@ YYSTYPE yylval;
 [ \t\r]+                             { /* Skip whitespace */ }
 \n                                   { /* Skip newline */ }
 
+[0-9]+\.[0-9]+ { 
+    yylval.fval = atof(yytext);
+    return REAL;
+}
 
-[0-9]+                               { yylval.ival = atoi(yytext); return INTEGER_LITERAL; }
+[0-9]+ { 
+    yylval.ival = atoi(yytext);
+    return NUM;
+}
 
-[A-Za-z][A-Za-z0-9_]*                {
-    // Check if identifier is actually a keyword
+[A-Za-z][A-Za-z0-9_]* {
+    // Primeiro, verificar para literais booleanos
+    if (strcmp(yytext, "true") == 0)  { yylval.bval = 1; return TRUE; }
+    if (strcmp(yytext, "false") == 0) { yylval.bval = 0; return FALSE; }
+
+    // Depois, para as outras palavras reservadas
     if (strcmp(yytext, "procedure") == 0) return PROCEDURE;
     if (strcmp(yytext, "Main") == 0) return MAIN;
     if (strcmp(yytext, "is") == 0) return IS;
@@ -36,11 +47,10 @@ YYSTYPE yylval;
     if (strcmp(yytext, "or") == 0) return OR;
     if (strcmp(yytext, "not") == 0) return NOT;
     if (strcmp(yytext, "xor") == 0) return XOR;
-    if (strcmp(yytext, "true") == 0) return BOOLEAN_LITERAL;
-    if (strcmp(yytext, "false") == 0) return BOOLEAN_LITERAL;
-    
+
+    // Caso contrário, é um identificador
     yylval.text = strdup(yytext);
-    return IDENTIFIER;
+    return ID;
 }
 
 ":="                                 { return ASSIGN; }

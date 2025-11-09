@@ -7,12 +7,12 @@
 int yylex (void);
 void yyerror (char const *);
 %}
-%define api.value.type {float}
 
 %union{
     int ival;
     float fval;
     char* text;
+    int bval;
     Exp exp;
     Stm stm;
 }
@@ -24,7 +24,7 @@ void yyerror (char const *);
 %token PROCEDURE
 %token MAIN
 %token IS
-%token BEGIN
+%token BEGIN_TOKEN
 %token END
 
 %token PUT_LINE GET_LINE
@@ -32,11 +32,8 @@ void yyerror (char const *);
 %token <ival> NUM
 %token <fval> REAL
 %token <text> ID
-%token TRUE FALSE
-
-%token BOOLEAN
-%token INTEGER
-%token FLOAT
+%token <bval> TRUE
+%token <bval> FALSE
 
 %token LPAREN RPAREN
 %token SEMICOLON
