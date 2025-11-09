@@ -63,50 +63,56 @@ void yyerror (char const *);
 
 %%
 
-top : proc {root = $1;}
+top 
+    : proc { root = $1; }
+    ;
 
-proc : PROCEDURE MAIN IS BEGIN stmt_lst END MAIN SEMICOLON           {$$ = mk_proced($5);}
-     ;
+proc 
+    : PROCEDURE MAIN IS BEGIN_TOKEN stmt_lst END MAIN SEMICOLON { $$ = mk_proced($5); }
+    ;
 
-stmt_lst : stmt_lst stmt {$$ = mk_compound($1, $2);}
-         | stmt          {$$ = $1;}
-         |               {$$ = NULL;}
-         ;
+stmt_lst 
+    : stmt_lst stmt { $$ = mk_compound($1, $2); }
+    | stmt          { $$ = $1; }
+    |               { $$ = NULL; }
+    ;
 
-stmt : IF expr THEN stmt_lst ELSE stmt_lst END IF SEMICOLON   {$$ = mk_if($2, $4, $5);}
-     | IF expr THEN stmt_lst END IF SEMICOLON                 {$$ = mk_if($2, $4, NULL);}
-     | WHILE expr LOOP stmt_lst END LOOP SEMICOLON            {$$ = mk_while($2, $4);}
-     | ID ASSIGNMENT expr SEMICOLON                           {$$ = $1;}
-     ;
+stmt 
+    : IF expr THEN stmt_lst ELSE stmt_lst END IF SEMICOLON { $$ = mk_if($2, $4, $5); }
+    | IF expr THEN stmt_lst END IF SEMICOLON             { $$ = mk_if($2, $4, NULL); }
+    | WHILE expr LOOP stmt_lst END LOOP SEMICOLON        { $$ = mk_while($2, $4); }
+    | ID ASSIGNMENT expr SEMICOLON                       { $$ = mk_assign($1, $3); }   /* fixed */
+    ;
 
-expr: NUM                         {$$ = mk_numexp($1);}
-    | REAL                        {$$ = mk_floatexp($1);}
-    | ID                          {$$ = mk_idexp($1);}
-    | TRUE                        {$$ = mk_boolexp(1);}
-    | FALSE                       {$$ = mk_boolexp(0);}
-    | LPAREN expr RPAREN          {$$ = mk_parenexp($2);}
-    | expr EQUAL_TO expr          {$$ = mk_opexp($1, EQUAL_TO, $3);}
-    | expr DIFFERENT_THAN expr    {$$ = mk_opexp($1, DIFFERENT_THAN, $3);}
-    | expr GREATER_THAN expr      {$$ = mk_opexp($1, GREATER_THAN, $3);}
-    | expr LESS_THAN expr         {$$ = mk_opexp($1, LESS_THAN, $3);}
-    | expr EQUAL_OR_GREATER expr  {$$ = mk_opexp($1, EQUAL_OR_GREATER, $3);}
-    | expr EQUAL_OR_LESS expr     {$$ = mk_opexp($1, EQUAL_OR_LESS, $3);}
-    | expr AND expr               {$$ = mk_opexp($1, AND, $3);}
-    | expr OR expr                {$$ = mk_opexp($1, OR, $3);}
-    | expr XOR expr               {$$ = mk_opexp($1, XOR, $3);}
-    | NOT expr                    {$$ = $1;}
-    | expr PLUS expr              {$$ = mk_opexp($1, PLUS, $3);}
-    | expr MINUS expr             {$$ = mk_opexp($1, MINUS, $3);}
-    | expr TIMES expr             {$$ = mk_opexp($1, TIMES, $3);}
-    | expr DIVISION expr          {$$ = mk_opexp($1, DIVISION, $3);}
-    | expr MOD expr               {$$ = mk_opexp($1, MOD, $3);}
-    | expr REM expr               {$$ = mk_opexp($1, REM, $3);}
-    | expr POWER expr             {$$ = mk_opexp($1, POWER, $3);}
-    ;   
+expr
+    : NUM                         { $$ = mk_numexp($1); }
+    | REAL                        { $$ = mk_floatexp($1); }
+    | ID                          { $$ = mk_idexp($1); }
+    | TRUE                        { $$ = mk_boolexp(1); }
+    | FALSE                       { $$ = mk_boolexp(0); }
+    | LPAREN expr RPAREN          { $$ = mk_parenexp($2); }
+    | expr EQUAL_TO expr          { $$ = mk_opexp($1, EQUAL_TO, $3); }
+    | expr DIFFERENT_THAN expr    { $$ = mk_opexp($1, DIFFERENT_THAN, $3); }
+    | expr GREATER_THAN expr      { $$ = mk_opexp($1, GREATER_THAN, $3); }
+    | expr LESS_THAN expr         { $$ = mk_opexp($1, LESS_THAN, $3); }
+    | expr EQUAL_OR_GREATER expr  { $$ = mk_opexp($1, EQUAL_OR_GREATER, $3); }
+    | expr EQUAL_OR_LESS expr     { $$ = mk_opexp($1, EQUAL_OR_LESS, $3); }
+    | expr AND expr               { $$ = mk_opexp($1, AND, $3); }
+    | expr OR expr                { $$ = mk_opexp($1, OR, $3); }
+    | expr XOR expr               { $$ = mk_opexp($1, XOR, $3); }
+    | NOT expr                    { $$ = mk_opexp(NULL, NOT, $2); }  /* fixed */
+    | expr PLUS expr              { $$ = mk_opexp($1, PLUS, $3); }
+    | expr MINUS expr             { $$ = mk_opexp($1, MINUS, $3); }
+    | expr TIMES expr             { $$ = mk_opexp($1, TIMES, $3); }
+    | expr DIVISION expr          { $$ = mk_opexp($1, DIVISION, $3); }
+    | expr MOD expr               { $$ = mk_opexp($1, MOD, $3); }
+    | expr REM expr               { $$ = mk_opexp($1, REM, $3); }
+    | expr POWER expr             { $$ = mk_opexp($1, POWER, $3); }
+    ;
 
 %%
 
 void yyerror(char const *msg) {
-   printf("parse error: %s\n", msg);
-   exit(-1);
+    printf("parse error: %s\n", msg);
+    exit(-1);
 }
