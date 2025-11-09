@@ -147,6 +147,9 @@ void print_op(BinOp op) {
         case XOR:
             printf(" xor ");
             break;
+        case NOT:
+            printf(" not ");
+            break;
     }              
 }
 
@@ -159,9 +162,15 @@ void print_exp(Exp ptr) {
             printf("%s", ptr->fields.ident);
             break;
         case OPEXP:
-            print_exp(ptr->fields.opexp.left);
-            print_op(ptr->fields.opexp.op);
-            print_exp(ptr->fields.opexp.right);
+            // Handle unary NOT operator (left operand is NULL)
+            if (ptr->fields.opexp.left == NULL && ptr->fields.opexp.op == NOT) {
+                printf("not ");
+                print_exp(ptr->fields.opexp.right);
+            } else {
+                print_exp(ptr->fields.opexp.left);
+                print_op(ptr->fields.opexp.op);
+                print_exp(ptr->fields.opexp.right);
+            }
             break;
         case BOOLEXP:
             if(ptr->fields.booleano)
@@ -176,6 +185,21 @@ void print_exp(Exp ptr) {
             printf("(");
             print_exp(ptr->fields.parenexp.inside);
             printf(")");
+            break;
+    }
+}
+
+/* Pretty-print a statement*/
+void print_stm(Stm ptr) {
+    switch(ptr->stm_t) {
+        case ASSIGNSTM:
+            printf("%s := ", ptr->fields.assign.ident);
+            print_exp(ptr->fields.assign.exp);
+            printf("; ");
+            break;
+        case COMPOUNDSTM:
+            print_stm(ptr->fields.compound.fst);
+            print_stm(ptr->fields.compound.snd);
             break;
         case IFSTM:
             printf("IF ");
@@ -195,26 +219,10 @@ void print_exp(Exp ptr) {
             print_stm(ptr->fields.whilestm.child);
             printf(" END LOOP; ");
             break;
-    }
-}
-
-/* Pretty-print a statement*/
-void print_stm(Stm ptr) {
-    switch(ptr->stm_t) {
-        case ASSIGNSTM:
-            printf("%s := ", ptr->fields.assign.ident);
-            print_exp(ptr->fields.assign.exp);
-            printf("; ");
-            break;
-        case COMPOUNDSTM:
-            print_stm(ptr->fields.compound.fst);
-            print_stm(ptr->fields.compound.snd);
-            break;
         case PROCEDSTM:
-            printf("PROCEDURE MAIN IS BEGIN");
+            printf("PROCEDURE MAIN IS BEGIN ");
             print_stm(ptr->fields.procedstm.stmt);
             printf("END MAIN;");
             break;
     }
 }
-

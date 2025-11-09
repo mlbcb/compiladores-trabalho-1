@@ -1,6 +1,8 @@
 typedef enum {PLUS, MINUS, TIMES, DIVISION, REM, MOD, POWER, EQUAL_TO, DIFFERENT_THAN, 
-              GREATER_THAN, LESS_THAN, EQUAL_OR_GREATER, EQUAL_OR_LESS, AND, OR, XOR
+              GREATER_THAN, LESS_THAN, EQUAL_OR_GREATER, EQUAL_OR_LESS, AND, OR, XOR, NOT
 }BinOp;
+//Observação: "NOT" evidentemente não é uma operação binária, mas preferiu-se incluir 
+//em BinOp para simplificação
 
 typedef enum { IDEXP, NUMEXP, FLOATEXP, BOOLEXP, OPEXP, PARENEXP
 }ExpType;
