@@ -1,4 +1,4 @@
 procedure Main is
 begin
-   Put_Line ("Hello World. Welcome to GNAT");
+   x := 5+7;
 end Main;

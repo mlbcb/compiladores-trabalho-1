@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "parser.tab.h"
+
 extern int yyparse(void);
 extern FILE* yyin;
 extern void printAST();
@@ -17,6 +18,7 @@ int main(int argc, char** argv) {
     if (yyparse() == 0) {
         printf("Abstract Sintax Tree:\n");
         printAST();
+        printf("\n");
     }
 
     fclose(yyin);

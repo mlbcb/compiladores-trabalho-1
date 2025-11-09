@@ -1,26 +1,14 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-int yylex (void);
-void yyerror (char const *);
-
-
-%}
-
-%code requires{
     #include "ast.h"
     Stm root;
-}
-
+%}
 %union{
     int ival;
     float fval;
     char* text;
     int bval;
-    Exp exp;
-    Stm stm;
+    Exp exps;
+    Stm stms;
 }
 
 /* tokens */
@@ -61,10 +49,21 @@ void yyerror (char const *);
 %left TIMES DIVIDE MOD REM
 %right NOT POWER
 
-%type <exp> expr
-%type <stm> stmt stmt_lst proc
-
 %start top
+
+%type <exps> expr
+%type <stms> stmt stmt_lst proc top
+
+%code requires{
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include "ast.h"
+
+    extern int yylex (void);
+    extern void yyerror (char const *);
+     
+    extern Stm root;
+}
 
 %%
 

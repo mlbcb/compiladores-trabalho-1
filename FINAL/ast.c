@@ -1,7 +1,7 @@
 /* Functions for building Abstract Syntax Trees (AST)*/
-#include "ast.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "ast.h"
 
 /* Construct expressions*/
 /*INT*/

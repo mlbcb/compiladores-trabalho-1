@@ -1,3 +1,6 @@
+#ifndef __ast_h__
+#define __ast_h__
+
 typedef enum {PLUSop, MINUSop, TIMESop, DIVIDEop, REMop, MODop, POWERop, EQop, NEQop, 
               GTop, LTop, GEop, LEop, ANDop, ORop, XORop
 }BinOp;
@@ -87,3 +90,5 @@ extern Exp mk_parenexp(Exp);
 
 extern void print_exp(Exp);
 extern void print_stm(Stm);
+
+#endif

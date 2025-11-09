@@ -4,7 +4,11 @@
 #include "parser.tab.h"
 
 void yyerror(const char *s);
+
+extern YYSTYPE yylval;
 %}
+
+%option noyywrap
 
 /* %option caseless */
 
@@ -72,7 +76,5 @@ void yyerror(const char *s);
 
 .                                    { yyerror("unexpected character"); }
 
+<<EOF>>                               { return EOF; }  /* End-of-file */
 %%
-
-int yywrap(void) { return 1; }
-
