@@ -11,7 +11,7 @@ struct _Exp {
         char *ident;   // IDEXP
         int num;       // NUMEXP
         float fnum;    // FLOATEXP
-        int bool;   // BOOLEXP
+        int booleano;      // BOOLEXP
         struct {   
             struct _Exp *left;
             BinOp op;
@@ -41,15 +41,15 @@ struct _Stm {
         } compound;      // COMPOUNDSTM
         struct {
             Exp cond;
-            struct _stm *then_child;
-            struct _stm *else_child;
+            struct _Stm *then_child;
+            struct _Stm *else_child;
         }ifstm;         //IFSTM
         struct {
             Exp cond;
-            struct _stm *child;
+            struct _Stm *child;
         } whilestm;      //WHILESTM
         struct {
-            struct _stm *stmt;
+            struct _Stm *stmt;
         } procedstm;      //PROCEDSTM
     } fields;
 };
@@ -61,6 +61,7 @@ extern Stm mk_compound(Stm, Stm);
 extern Stm mk_assign(char *, Exp);
 extern Stm mk_if(Exp, Stm, Stm);
 extern Stm mk_while(Exp, Stm);
+extern Stm mk_proced(Stm);
 
 extern Exp mk_opexp(Exp, BinOp, Exp);
 extern Exp mk_numexp(int);

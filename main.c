@@ -3,6 +3,8 @@
 #include "parser.tab.h"
 #include "ast.h"
 extern FILE* yyin;
+extern int yyparse(void);
+extern Stm root;
 
 int main(int argc, char** argv) {
     --argc; ++argv;
@@ -20,6 +22,4 @@ int main(int argc, char** argv) {
 
     fclose(yyin);
     return 0;
-
-
 }

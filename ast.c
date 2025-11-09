@@ -32,15 +32,7 @@ Exp mk_idexp(char *ident){
 Exp mk_boolexp(int bool) {
     Exp ptr = malloc(sizeof(struct _Exp));
     ptr->exp_t = BOOLEXP;
-    ptr->fields.bool = bool;
-    return ptr;
-}
-
-/*FLOAT*/
-Exp mk_floatexp(float num) {
-    Exp ptr = malloc(sizeof(struct _Exp));
-    ptr->exp_t = FLOATEXP;
-    ptr->fields.fnum = num;
+    ptr->fields.booleano = bool;
     return ptr;
 }
 
@@ -172,18 +164,36 @@ void print_exp(Exp ptr) {
             print_exp(ptr->fields.opexp.right);
             break;
         case BOOLEXP:
-            if(ptr->fields.bool)
+            if(ptr->fields.booleano)
                 printf("TRUE");
             else
                 printf("FALSE");
             break;
         case FLOATEXP:
-            printf("%f", ptr->fields.bool);
+            printf("%f", ptr->fields.fnum);
             break;
         case PARENEXP:
             printf("(");
             print_exp(ptr->fields.parenexp.inside);
             printf(")");
+            break;
+        case IFSTM:
+            printf("IF ");
+            print_exp(ptr->fields.ifstm.cond);
+            printf(" THEN ");
+            print_stm(ptr->fields.ifstm.then_child);
+            if(ptr->fields.ifstm.else_child != NULL){
+                printf(" ELSE ");
+                print_stm(ptr->fields.ifstm.else_child);
+            }
+            printf(" END IF; ");
+            break;
+        case WHILESTM:
+            printf("WHILE ");
+            print_exp(ptr->fields.whilestm.cond);
+            printf(" LOOP ");
+            print_stm(ptr->fields.whilestm.child);
+            printf(" END LOOP; ");
             break;
     }
 }
@@ -192,32 +202,13 @@ void print_exp(Exp ptr) {
 void print_stm(Stm ptr) {
     switch(ptr->stm_t) {
         case ASSIGNSTM:
-            printf("%s", ptr->fields.assign.ident);
-            printf("=");
+            printf("%s := ", ptr->fields.assign.ident);
             print_exp(ptr->fields.assign.exp);
             printf("; ");
             break;
         case COMPOUNDSTM:
             print_stm(ptr->fields.compound.fst);
             print_stm(ptr->fields.compound.snd);
-            break;
-        case IFSTM:
-            printf("IF");
-            print_stm(ptr->fields.ifstm.cond);
-            printf("THEN");
-            print_stm(ptr->fields.ifstm.then_child);
-            if(ptr->fields.ifstm.else_child != NULL){
-                printf("ELSE");
-                print_stm(ptr->fields.ifstm.else_child);
-            }
-            printf("END IF;");
-            break;
-        case WHILESTM:
-            printf("WHILE");
-            print_stm(ptr->fields.whilestm.cond);
-            printf("LOOP");
-            print_stm(ptr->fields.whilestm.child);
-            printf("END LOOP;");
             break;
         case PROCEDSTM:
             printf("PROCEDURE MAIN IS BEGIN");
