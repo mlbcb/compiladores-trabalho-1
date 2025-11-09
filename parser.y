@@ -17,6 +17,7 @@ void yyerror (char const *);
     Stm stm;
 }
 
+/*Não terminais*/
 %type <exp> expr
 %type <stm> stmt stmt_lst proc
 
