@@ -214,44 +214,44 @@ void print_stm(Stm ptr) {
             printf("%s", ptr->fields.assign.ident);
             printf(" := ");
             print_exp(ptr->fields.assign.exp);     
-            printf("; ");
+            printf(";\n");
             break;
         case COMPOUNDSTM:
             print_stm(ptr->fields.compound.fst);
             print_stm(ptr->fields.compound.snd);
             break;
         case IFSTM:
-            printf("IF");
+            printf("IF ");
             print_exp(ptr->fields.ifstm.cond);
-            printf("THEN");
+            printf(" THEN ");
             print_stm(ptr->fields.ifstm.then_child);
             if(ptr->fields.ifstm.else_child != NULL){
-                printf("ELSE");
+                printf("ELSE ");
                 print_stm(ptr->fields.ifstm.else_child);
             }
-            printf("END IF;");
+            printf("END IF; \n");
             break;
         case WHILESTM:
-            printf("WHILE");
+            printf("WHILE ");
             print_exp(ptr->fields.whilestm.cond);
-            printf("LOOP");
+            printf(" LOOP ");
             print_stm(ptr->fields.whilestm.child);
-            printf("END LOOP;");
+            printf("END LOOP; \n");
             break;
         case PROCEDSTM:
-            printf("PROCEDURE MAIN IS BEGIN");
+            printf("PROCEDURE MAIN IS BEGIN\n");
             print_stm(ptr->fields.procedstm.stmt);
-            printf("END MAIN;");
+            printf("END MAIN; \n");
             break;
         case PUTLINESTM:
             printf("PUT_LINE(");
             printf("%s", ptr->fields.putlinestm.ouput);
-            printf(");");
+            printf(");\n");
             break;
         case GETLINESTM:
             printf("GET_LINE(");
             printf("%s", ptr->fields.getlinestm.input);
-            printf(");");
+            printf(");\n");
             break;
     }
 }
