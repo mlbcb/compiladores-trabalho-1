@@ -1,0 +1,4 @@
+- [x] Examine project structure and README
+- [x] Review lexer and parser files
+- [ ] Test with sample Ada code
+- [ ] Verify AST generation

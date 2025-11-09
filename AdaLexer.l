@@ -6,7 +6,6 @@
 void yyerror(const char *s);
 YYSTYPE yylval;
 %}
-
 /* %option caseless */
 
 %%
@@ -47,6 +46,8 @@ YYSTYPE yylval;
     if (strcmp(yytext, "or") == 0) return OR;
     if (strcmp(yytext, "not") == 0) return NOT;
     if (strcmp(yytext, "xor") == 0) return XOR;
+    if (strcmp(yytext, "mod") == 0) return MOD;
+    if (strcmp(yytext, "rem") == 0) return REM;
 
     // Caso contrário, é um identificador
     yylval.text = strdup(yytext);
@@ -54,24 +55,27 @@ YYSTYPE yylval;
 }
 
 ":="                                 { return ASSIGN; }
-"="                                  { return EQ; }
-"/="                                 { return NEQ; }
-"<="                                 { return LE; }
-">="                                 { return GE; }
-"<"                                  { return LT; }
-">"                                  { return GT; }
+"="                                  { return EQUAL_TO; }
+"/="                                 { return DIFFERENT_THAN; }
+"<="                                 { return EQUAL_OR_LESS; }
+">="                                 { return EQUAL_OR_GREATER; }
+"<"                                  { return LESS_THAN; }
+">"                                  { return GREATER_THAN; }
 "+"                                  { return PLUS; }
 "*"                                  { return TIMES; }
-"/"                                  { return DIVIDE; }
+"/"                                  { return DIVISION; }
 "("                                  { return LPAREN; }
 ")"                                  { return RPAREN; }
-";"                                  { return SEMI; }
+";"                                  { return SEMICOLON; }
 ":"                                  { return COLON; }
 [.]                                  { return DOT; }
 ","                                  { return COMMA; }
 "-"                                  { return MINUS; }
+"**"                                  { return POWER; }
 
 .                                    { printf("UNKNOWN: %s\n", yytext); }
+
+<<EOF>>                               { return EOF_TOKEN; }  /* End-of-file token */
 
 %%
 

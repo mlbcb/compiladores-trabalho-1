@@ -39,7 +39,7 @@ void yyerror (char const *);
 %token LPAREN RPAREN
 %token SEMICOLON
 %token COLON
-%token ASSIGNMENT
+%token ASSIGN
 
 %token EQUAL_TO DIFFERENT_THAN
 %token GREATER_THAN LESS_THAN
@@ -50,7 +50,7 @@ void yyerror (char const *);
 %token TIMES DIVISION
 %token MOD POWER REM
 
-%token IF THEN ELSE 
+%token IF THEN ELSE
 %token WHILE LOOP
 
 /*token precedence*/
@@ -79,7 +79,7 @@ stmt_lst
     ;
 
 stmt 
-    : IF expr THEN stmt_lst ELSE stmt_lst END IF SEMICOLON { $$ = mk_if($2, $4, $5); }
+    : IF expr THEN stmt_lst ELSE stmt_lst END IF SEMICOLON { $$ = mk_if($2, $4, $6); }
     | IF expr THEN stmt_lst END IF SEMICOLON             { $$ = mk_if($2, $4, NULL); }
     | WHILE expr LOOP stmt_lst END LOOP SEMICOLON        { $$ = mk_while($2, $4); }
     | ID ASSIGNMENT expr SEMICOLON                       { $$ = mk_assign($1, $3); }   /* fixed */
